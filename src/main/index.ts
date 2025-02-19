@@ -29,37 +29,6 @@ let trayIcon = null;
 
 reportExceptions();
 
-const enforceMacOSAppLocation = () => {
-  if (process.platform !== 'darwin') return;
-
-  const appPath = app.getPath('exe');
-  const isInsideApplications = appPath.startsWith('/Applications/');
-
-  if (!isInsideApplications) {
-    const result = dialog.showMessageBoxSync({
-      type: 'warning',
-      buttons: ['Move to Applications', 'Quit'],
-      defaultId: 0,
-      message: 'Move to Applications?',
-      detail: 'This app should be run from the Applications folder. Click "Move to Applications" to continue.',
-    });
-
-    if (result === 0) {
-      const destPath = `/Applications/${path.basename(appPath)}`;
-
-      try {
-        fs.renameSync(appPath, destPath);
-        app.relaunch({ args: process.argv, execPath: destPath });
-        app.exit();
-      } catch (error) {
-        console.error('Failed to move app:', error);
-      }
-    } else {
-      app.quit();
-    }
-  }
-};
-
 if (enforceSingleInstance()) {
   app.whenReady()
     .then(() => {
