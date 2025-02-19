@@ -1,17 +1,25 @@
 import {Menu, app, shell, clipboard, BrowserWindow, dialog} from 'electron';
 import {checkForUpdates} from 'electron-update-notifier';
 import path from 'path';
-import {openNewGitHubIssue, debugInfo} from 'electron-util';
 import log from 'electron-log';
-import {autoLaunch} from './openAtLogin';
-import aboutPanel from './aboutPanel';
-import store from './../config';
-import {toggleExternalLinksGuard} from "./externalLinks";
-import environment from "../../environment";
+import {autoLaunch} from './openAtLogin.js';
+import aboutPanel from './aboutPanel.js';
+import store from '../config.js';
+import {toggleExternalLinksGuard} from "./externalLinks.js";
+import environment from "../../environment.js";
 
 export default (window: BrowserWindow) => {
-  const pkg = require(path.join(app.getAppPath(), 'package.json'));
 
+  const debugInfo = () => {
+    return `
+    Electron: ${process.versions.electron}
+    Chrome: ${process.versions.chrome}
+    Node.js: ${process.versions.node}
+    V8: ${process.versions.v8}
+    OS: ${process.platform} ${process.arch}
+    `;
+  };
+  
   const relaunchApp = () => {
     app.relaunch({
       // auto-launch adds the --hidden flag to the command during OS start
@@ -203,14 +211,6 @@ export default (window: BrowserWindow) => {
       label: 'Help',
       submenu: [
         {
-          label: 'Say Thanks to Developer',
-          click: () => {
-            setImmediate(() => {
-              shell.openExternal(pkg.homepage)
-            })
-          }
-        },
-        {
           label: 'Check For Updates',
           enabled: true,
           click: () => {
@@ -222,15 +222,6 @@ export default (window: BrowserWindow) => {
         {
           label: 'Troubleshooting',
           submenu: [
-            {
-              label: 'Report issue...',
-              click: () => {
-                openNewGitHubIssue({
-                  repoUrl: pkg.repository,
-                  body: `### Platform\n\n${debugInfo()}`
-                });
-              }
-            },
             {
               label: 'Toggle External Links Guard',
               click: () => {
