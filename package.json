@@ -1,6 +1,7 @@
 {
   "name": "google-chat-electron",
-  "version": "2.20.0",
+  "version": "2.20.1",
+  "type": "module",
   "description": "Unofficial desktop app for Google Chat.",
   "private": true,
   "repository": "https://github.com/ankurk91/google-chat-electron",
@@ -25,6 +26,7 @@
     "build:mac-arm-zip": "bash ./mac/installer-arm-zip.sh",
     "prepack:linux": "npm run clean:dist && npm run ts",
     "pack:linux": "electron-packager . --platform=linux --arch=x64 --asar --overwrite --out=./dist/",
+    "pack:linuxarm": "electron-packager . --platform=linux --arch=arm64 --asar --overwrite --out=./dist/",
     "build:deb": "electron-installer-debian --config=./debian/config.json --arch=amd64",
     "build:deb-checksum": "cd ./dist/installers && sha512sum *.deb > google-chat-electron-deb-SHA512.txt"
   },
